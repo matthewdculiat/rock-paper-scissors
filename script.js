@@ -12,81 +12,120 @@ function getComputerChoice() {
     }
 }
 
-let playerStatus = 0;
-let computerStatus = 0;
 let playerWins = 0;
 let computerWins = 0;
+const resetScore = () => {
+    div.textContent = "";
+    return game();
+}
 
-function playRound(playerSelection, computerSelection) {
-    playerSelection = playerSelection.toLowerCase();
-    playerStatus = 0;
-    computerStatus = 0;
-    if (playerSelection === 'rock' || playerSelection === 'paper' || playerSelection === 'scissors') {
-        console.log(`Your input is ${playerSelection}`);
-        console.log(`The computer's input is ${computerSelection}`);
-    } else {
-        return console.log('Please input an acceptable choice.')
+function playRound(playerSelection, computerSelection = getComputerChoice) {
+    if (playerWins > 5 || computerWins > 5) {
+        div.innerHTML += `The game is already over!`
+        div.innerHTML += "<br>"
+        div.textContent = "";
     }
-
     switch (true) {
         case playerSelection === 'rock' && computerSelection === 'rock':
-            playerStatus = 0;
-            computerStatus = 0;
+            div.innerHTML += "It's a draw. Try again!";
+            div.innerHTML += "<br>";
             return console.log("It's a draw. Try again!");
         case playerSelection === 'rock' && computerSelection === 'paper':
-            playerStatus = 0;
-            computerStatus = 1;
             computerWins++;
+            div.innerHTML += "You're the loser this round! Paper beats Rock!";
+            div.innerHTML += "<br>";
             return console.log("You're the loser this round! Paper beats Rock!");
         case playerSelection === 'rock' && computerSelection === 'scissors':
-            playerStatus = 1;
-            computerStatus = 0;
             playerWins++;
+            div.innerHTML += "You're the winner this round! Rock beats Scissors!";
+            div.innerHTML += "<br>";
             return console.log("You're the winner this round! Rock beats Scissors!"); 
         case playerSelection === 'paper' && computerSelection === 'rock':
-            playerStatus = 1;
-            computerStatus = 0;
             playerWins++;
+            div.innerHTML += "You're the winner this round! Paper beats Rock!";
+            div.innerHTML += "<br>";
             return console.log("You're the winner this round! Paper beats Rock!");
         case playerSelection === 'paper' && computerSelection === 'paper':
-            playerStatus = 0;
-            computerStatus = 0;
+            div.innerHTML += "It's a draw. Try again!";
+            div.innerHTML += "<br>";
             return console.log("It's a draw. Try again!");
         case playerSelection === 'paper' && computerSelection === 'scissors':
-            playerStatus = 0;
-            computerStatus = 1;
             computerWins++;
+            div.innerHTML += "You're the loser this round! Scissors beats Paper!";
+            div.innerHTML += "<br>";
             return console.log("You're the loser this round! Scissors beats Paper!");
         case playerSelection === 'scissors' && computerSelection === 'rock':
-            playerStatus = 0;
-            computerStatus = 1;
             computerWins++;
+            div.innerHTML += "You're the loser this round! Rock beats Scissors!";
+            div.innerHTML += "<br>";
             return console.log("You're the loser this round! Rock beats Scissors!");
         case playerSelection === 'scissors' && computerSelection === 'paper':
-            playerStatus = 1;
-            computerStatus = 0;
             playerWins++;
+            div.innerHTML += "You're the winner this round! Scissors beats Paper!";
+            div.innerHTML += "<br>";
             return console.log("You're the winner this round! Scissors beats Paper!");
         case playerSelection === 'scissors' && computerSelection === 'scissors':
-            playerStatus = 0;
-            computerStatus = 0;
+            div.innerHTML += "It's a draw. Try again!";
+            div.innerHTML += "<br>";
             return console.log("It's a draw. Try again!");
         default:
             return console.log("Match error.");
     }
 }
 
+const container = document.querySelector('.container');
+
+const btnR = document.createElement('button');
+btnR.classList.add('rock');
+btnR.textContent = 'Rock';
+container.appendChild(btnR);
+
+const btnP = document.createElement('button');
+btnP.classList.add('paper');
+btnP.textContent = 'Paper';
+container.appendChild(btnP);
+
+const btnS = document.createElement('button');
+btnS.classList.add('scissors');
+btnS.textContent = 'Scissors';
+container.appendChild(btnS);
+
+const div = document.createElement('div');
+div.classList.add('display');
+container.appendChild(div);
+
 function game() {
-    do {
-        playRound(prompt("Choose your your hand: "), getComputerChoice());
-        console.log(`Overall Tally: Player - ${playerWins}, Computer - ${computerWins}`);
-        if (playerWins === 5) {
-            return console.log("You won this game. Congratulations!");
-        }
-        if (computerWins === 5) {
-            return console.log("You lost this game. Try again next time!");
-        }
-    } while (playerWins < 5 || computerWins < 5);
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach((button) => {
+        button.addEventListener('click', e => {
+            console.log(`You chose ${e.target.className}.`);
+            div.innerHTML += `You chose ${e.target.className}.`;
+            div.innerHTML += "<br>";
+            playRound(e.target.className, getComputerChoice());
+            console.log(`Overall Tally: Player - ${playerWins}, Computer - ${computerWins}`);
+            div.innerHTML += `Overall Tally: Player - ${playerWins}, Computer - ${computerWins}`;
+            div.innerHTML += "<br>";
+            if (playerWins === 5) {
+                console.log("You won this game. Congratulations!");
+                div.innerHTML += "You won this game. Congratulations!";
+                div.innerHTML += "<br>";
+                playerWins = 0;
+                computerWins = 0;
+                div.innerHTML += "The game log will reset in 3 seconds.";
+                return setTimeout(resetScore, 3000);
+            }
+            if (computerWins === 5) {
+                console.log("You lost this game. Try again next time!");
+                div.innerHTML += "You lost this game. Try again next time!";
+                div.innerHTML += "<br>";
+                playerWins = 0;
+                computerWins = 0;
+                div.innerHTML += "The game log will reset in 3 seconds.";
+                return setTimeout(resetScore, 3000);
+
+            }
+        })
+    })
 }
 
 game();

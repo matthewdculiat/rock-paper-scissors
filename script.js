@@ -24,6 +24,7 @@ function playRound(playerSelection, computerSelection = getComputerChoice) {
         div.innerHTML += `The game is already over!`
         div.innerHTML += "<br>"
         div.textContent = "";
+        location.reload();
     }
     switch (true) {
         case playerSelection === 'rock' && computerSelection === 'rock':
@@ -109,8 +110,6 @@ function game() {
                 console.log("You won this game. Congratulations!");
                 div.innerHTML += "You won this game. Congratulations!";
                 div.innerHTML += "<br>";
-                playerWins = 0;
-                computerWins = 0;
                 div.innerHTML += "The game log will reset in 3 seconds.";
                 return setTimeout(resetScore, 3000);
             }
@@ -118,8 +117,6 @@ function game() {
                 console.log("You lost this game. Try again next time!");
                 div.innerHTML += "You lost this game. Try again next time!";
                 div.innerHTML += "<br>";
-                playerWins = 0;
-                computerWins = 0;
                 div.innerHTML += "The game log will reset in 3 seconds.";
                 return setTimeout(resetScore, 3000);
 
